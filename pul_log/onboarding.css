@@ -1,0 +1,110 @@
+:root {
+  /* 배경/그린 톤: 아이폰 16 프로 기준 시안 색감 */
+  --bg: #b4d3a1; /* 라이트 그린 배경 */
+  --duration-in: 700ms; /* 페이드 인 */
+  --hold: 3000ms; /* 유지 시간 */
+  --duration-out: 600ms; /* 페이드 아웃 */
+  --easing: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* reset 최소화 */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+  overflow: hidden;
+}
+
+/* 로고 공통 */
+.logo {
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px) scale(0.985);
+  filter: drop-shadow(
+    0 12px 18px color-mix(in oklab, var(--shadow) 18%, transparent)
+  );
+  will-change: opacity, transform;
+}
+
+/* 메인 로고(중앙) – 더 아래로 내림 */
+.logo-main {
+  width: min(36vw, 220px);
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  align-self: center;
+  margin-top: clamp(60px, 12vh, 120px);
+}
+
+/* AWS 로고(하단) – 훨씬 작게 & 위로 올림 */
+.logo-aws {
+  width: min(10vw, 38px);
+  margin-bottom: clamp(80px, 14vh, 140px);
+  align-self: end;
+  opacity: 0.92;
+  filter: none;
+}
+
+/* 진입 애니메이션 */
+.show .logo {
+  animation: fadeUpIn var(--duration-in) var(--easing) forwards;
+}
+.show .logo-aws {
+  animation-delay: 90ms;
+}
+
+/* 종료 애니메이션 */
+.out .logo {
+  animation: fadeOut var(--duration-out) var(--easing) forwards;
+}
+
+@keyframes fadeUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+  }
+}
+
+/* 애니메이션 최소화 선호 시 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-in: 1ms;
+    --duration-out: 1ms;
+    --hold: 400ms;
+  }
+  .logo {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

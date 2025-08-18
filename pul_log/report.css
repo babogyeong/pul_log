@@ -1,0 +1,198 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "HakgyoansimDunggeunmisoTTF-B";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+:root {
+  --bg: #b4d3a1;
+  --panel: #cdeab7;
+  --pill: #f6f4a6;
+  --text: #1f5b3f;
+  --muted: #1f5b3fb3;
+  --green: #2b6d46;
+  --green-700: #2a5b40;
+  --c-carb: #2c5532; /* 진한 녹색 */
+  --c-prot: #4d7c54; /* 중간 */
+  --c-fat: #67a570; /* 밝은 */
+  --shadow: 0 2px 0 #2a5b4026;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Pretendard, "Pretendard-Regular", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+}
+
+.report {
+  min-height: 100svh;
+  padding: clamp(14px, 4vw, 24px);
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: clamp(12px, 3vh, 20px);
+}
+.logo {
+  width: clamp(28px, 7vw, 36px);
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  margin-right: 15px;
+}
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+.brand {
+  margin: 0;
+  font-size: clamp(18px, 6vw, 26px);
+  font-weight: 600;
+  color: #5a3e2b;
+  font-family: "HakgyoansimDunggeunmisoTTF-B";
+}
+
+/* 카드 공통 */
+.card {
+  background: var(--panel);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid #2a5b4044;
+  padding: clamp(14px, 4vw, 22px);
+  margin-top: clamp(12px, 3vh, 20px);
+}
+
+.section-title {
+  margin: 0 0 clamp(8px, 1.2vh, 12px);
+  font-size: clamp(16px, 4.6vw, 20px);
+  font-weight: 900;
+  color: var(--green-700);
+  font-family: "HakgyoansimDunggeunmisoTTF-B";
+}
+
+/* 차트 */
+.chart-wrap {
+  width: 100%;
+  max-width: min(520px, 92vw);
+  margin: clamp(6px, 1vh, 12px) auto;
+}
+#pie {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 범례 */
+.legend {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  padding: 0;
+  margin: 0 auto;
+  justify-content: center;
+  color: var(--green-700);
+  font-weight: 700;
+  font-size: 14px;
+}
+.legend .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  box-shadow: inset 0 0 0 1px #0002;
+}
+.c-carb {
+  background: var(--c-carb);
+}
+.c-prot {
+  background: var(--c-prot);
+}
+.c-fat {
+  background: var(--c-fat);
+}
+
+/* 칼로리 숫자 */
+.kcals {
+  margin: 4px 0 0;
+  font-weight: 900;
+  font-size: clamp(22px, 7vw, 32px);
+  letter-spacing: 0.2px;
+  font-family: "HakgyoansimDunggeunmisoTTF-B";
+}
+
+#recText {
+  font-family: "HakgyoansimDunggeunmisoTTF-B";
+}
+
+/* 추천 */
+.rec {
+  position: relative;
+  overflow: hidden;
+}
+.bubble {
+  display: inline-block;
+  background: var(--pill);
+  border: 2px solid var(--green);
+  color: var(--green-700);
+  font-weight: 900;
+  border-radius: 999px;
+  padding: 14px 18px;
+  max-width: 680px;
+  margin-bottom: 15px;
+}
+.mascot {
+  margin-left: 230px;
+  right: clamp(6px, 2vw, 16px);
+  bottom: clamp(6px, 3vh, 24px);
+  width: clamp(84px, 22vw, 140px);
+  transform: rotate(-10deg);
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* 스켈레톤 */
+.skel {
+  position: relative;
+  overflow: hidden;
+  background: #00000010;
+  border-radius: 8px;
+}
+.skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, #0000 0%, #ffffff33 50%, #0000 100%);
+  transform: translateX(-100%);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}

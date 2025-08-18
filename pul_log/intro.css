@@ -1,0 +1,167 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --bg: #b4d3a1; /* 라이트 그린 */
+  --text: #2c5532; /* 딥 그린 텍스트 */
+  --shadow: #2f6b4e; /* 드롭섀도우에 쓰는 딥 그린 */
+  --in: 700ms; /* 페이드 인 */
+  --hold: 4000ms; /* 유지 시간 */
+  --out: 600ms; /* 페이드 아웃 */
+  --ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* 화면 레이아웃 */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100svh; /* 모바일 주소창 변화 대응 */
+  overflow: hidden;
+  display: block;
+  padding: clamp(12px, 4vw, 28px);
+}
+
+/* 텍스트 영역
+  - iPhone 16 Pro 기준: top≈250px, left≈10px
+  - 작은 폰에선 너무 내려가지 않도록 최소값, 큰 화면에선 과도해지지 않도록 최대값 제한
+*/
+.copy {
+  /* 250px을 기준으로, 화면 높이에 비례해 약간 가변 */
+  margin-top: clamp(140px, 26vh, 280px);
+  /* 10px을 기준으로, 화면 너비에 비례해 소폭 가변 */
+  margin-left: clamp(6px, 2.2vw, 16px);
+
+  max-width: min(520px, 78vw);
+}
+
+/* 텍스트 */
+.headline {
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: Pretendard, "Pretendard-Regular", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  margin: 0 0 clamp(12px, 2.2vh, 18px);
+  line-height: 1.15;
+  font-weight: 700;
+  font-size: clamp(24px, 5.6vw, 36px);
+  letter-spacing: -0.01em;
+  color: #2c5532;
+  text-wrap: balance;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: clamp(14px, 3.6vw, 18px);
+  line-height: 1.4;
+  opacity: 0.92;
+}
+
+/* 우하단 로고: 약간 기울어진 상태, 시안 위치 고정 */
+.mascot {
+  position: absolute;
+  right: clamp(-10px, -1vw, 0px); /* 약간 바깥으로 */
+  bottom: clamp(80px, 16vh, 180px);
+  width: clamp(160px, 42vw, 320px);
+  height: auto;
+  transform: rotate(-14deg);
+  transform-origin: 60% 60%;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  filter: drop-shadow(
+    0 18px 24px color-mix(in oklab, var(--shadow) 20%, transparent)
+  );
+}
+
+/* 애니메이션: 온보딩과 동일한 패턴 */
+body .copy,
+body .mascot {
+  opacity: 0;
+  transform: translateY(6px) scale(0.985) rotate(var(--rot, 0deg));
+  will-change: opacity, transform;
+}
+
+/* 진입 */
+body.show .copy {
+  animation: fadeInUp var(--in) var(--ease) forwards;
+}
+body.show .mascot {
+  /* 마스코트는 회전 유지 */
+  --rot: -14deg;
+  animation: fadeInUp var(--in) var(--ease) 0.08s forwards;
+}
+
+/* 퇴장 */
+body.out .copy,
+body.out .mascot {
+  animation: fadeOut var(--out) var(--ease) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985) rotate(var(--rot, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--rot, 0deg));
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99) rotate(var(--rot, 0deg));
+  }
+}
+
+/* 접근성: 모션 최소화 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --in: 1ms;
+    --out: 1ms;
+    --hold: 600ms;
+  }
+  .copy,
+  .mascot {
+    animation: none !important;
+    opacity: 1;
+    transform: rotate(var(--rot, 0deg));
+  }
+}
+
+/* 작은 폰에서 로고가 과도하게 커지지 않도록 */
+@media (max-width: 360px) {
+  .mascot {
+    width: clamp(140px, 52vw, 200px);
+    bottom: clamp(64px, 14vh, 120px);
+  }
+}
+
+/* 아주 큰 화면(대형 태블릿 이상)에서 텍스트가 너무 멀어지지 않게 소폭 상향 보정 */
+@media (min-width: 1024px) and (min-height: 800px) {
+  .copy {
+    margin-top: clamp(160px, 22vh, 260px);
+    margin-left: clamp(8px, 1.8vw, 20px);
+  }
+}

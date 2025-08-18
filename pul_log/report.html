@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>풀‑report</title>
+
+    <!-- 확대 제한 -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" href="report.css" />
+    <script defer src="report.js"></script>
+  </head>
+  <body>
+    <main class="report">
+      <!-- 헤더 -->
+      <header class="header">
+        <a
+          class="logo-link"
+          href="javascript:void(0)"
+          aria-label="이전으로"
+          id="backBtn"
+        >
+          <img class="logo" src="images/avodo_png.png" alt="아보도 로고" />
+        </a>
+        <h1 class="brand" style="color: #4d7c54">풀</h1>
+        <h1 class="brand" style="color: #53351c">‑report</h1>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">오늘 먹은 영양소</h2>
+
+        <!-- 파이차트 -->
+        <div class="chart-wrap">
+          <!-- SVG는 JS에서 채워 넣음 -->
+          <svg
+            id="pie"
+            viewBox="0 0 200 200"
+            role="img"
+            aria-label="영양소 비율 차트"
+          ></svg>
+        </div>
+
+        <!-- 범례 -->
+        <ul class="legend" aria-label="영양소 범례">
+          <li><span class="dot c-carb"></span>탄수화물</li>
+          <li><span class="dot c-prot"></span>단백질</li>
+          <li><span class="dot c-fat"></span>지방</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">오늘 먹은 칼로리</h2>
+        <p class="kcals">
+          <span id="kcalNow">0</span>kcal / <span id="kcalGoal">0</span>kcal
+        </p>
+      </section>
+
+      <section class="card rec">
+        <h2 class="section-title">식사 추천</h2>
+        <div class="bubble" id="recText">데이터를 불러오는 중...</div>
+        <img
+          class="mascot"
+          src="images/avocado.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </section>
+    </main>
+  </body>
+</html>

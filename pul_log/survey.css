@@ -1,0 +1,202 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --bg: #b4d3a1;
+  --pill: #e7e99d; /* 선택 시 노란색 */
+  --green: #4d7c54; /* 기본 녹색(버튼 기본) */
+  --green-600: #356f4c;
+  --green-700: #2a5b40;
+  --text: #2c5532;
+  --muted: #1f5b3fb3;
+  --r: 999px;
+  --ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Pretendard, "Pretendard-Regular", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+}
+
+/* 전체 컨테이너 */
+.survey {
+  position: fixed;
+  inset: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* 가로 스크롤-스냅 트랙 */
+.track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  touch-action: pan-y; /* 세로 스크롤 허용 */
+}
+.slide {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  scroll-snap-align: start;
+  padding: clamp(14px, 4vw, 24px);
+}
+
+/* 슬라이드 내부 패널: 화면을 넘지 않음(내부만 세로 스크롤) */
+.panel {
+  width: 100%;
+  height: calc(100% - clamp(28px, 6vw, 44px));
+  margin: auto;
+  padding: clamp(14px, 3.6vw, 22px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.panel-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 그룹 */
+.group {
+  margin: clamp(16px, 3.4vh, 24px) 0;
+}
+.group.center {
+  text-align: center;
+}
+
+/* 질문 타이틀 */
+.q {
+  margin: 0 0 10px 2px;
+  font-size: clamp(16px, 4.6vw, 18px);
+  font-weight: 700;
+  color: var(--green-700);
+}
+
+/* 입력 필드 */
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--pill);
+  border: 2px solid var(--green-600);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  box-shadow: 0 2px 0 var(--shadow);
+}
+.arrow {
+  width: 18px;
+  text-align: center;
+  color: var(--green-700);
+  opacity: 0.92;
+}
+.field input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  color: var(--text);
+}
+.field input::placeholder {
+  color: #1f5b3f66;
+}
+
+/* 칩: 기본 모두 녹색, 선택되면 노란색으로 */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1.6vw, 12px);
+}
+.chips.center {
+  justify-content: center;
+}
+
+.chip {
+  -webkit-tap-highlight-color: transparent;
+  border-radius: var(--r);
+  padding: 10px 16px;
+  border: 2px solid var(--green);
+  background: var(--green); /* 기본 녹색 */
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  transition: background-color 0.18s var(--ease), color 0.18s var(--ease),
+    border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.chip.is-selected {
+  background: var(--pill); /* 선택 시 노란색 */
+  color: var(--green-700);
+  border-color: var(--green-700);
+}
+
+/* 안내 문구 */
+.note {
+  margin: 8px 4px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* 하단 페이저(항상 보임) */
+.pager {
+  position: absolute;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1f5b3f66;
+}
+.dot.active {
+  background: #1f5b3f;
+}
+
+/* 완료 버튼(3번째 슬라이드에서만) */
+.btn-primary {
+  position: absolute;
+  right: clamp(16px, 6vw, 24px);
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  border: none;
+  border-radius: 14px;
+  padding: 12px 22px;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 2px 0 var(--shadow);
+  z-index: 5;
+}
+.hidden {
+  display: none;
+}

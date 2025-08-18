@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>survey</title>
+
+    <!-- 확대 제한 -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" href="survey.css" />
+    <script defer src="survey.js"></script>
+  </head>
+  <body>
+    <main class="survey" aria-label="사용자 설문">
+      <!-- 가로 스크롤-스냅 트랙 -->
+      <section id="track" class="track" aria-live="polite">
+        <!-- slide 1 : 기본정보 -->
+        <article class="slide" aria-label="기본 정보 입력">
+          <div class="panel">
+            <div class="group">
+              <h2 class="q">이름이 뭔가요?</h2>
+              <label class="field">
+                <span class="arrow">›</span>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="이름을 입력해주세요"
+                  autocomplete="name"
+                />
+              </label>
+            </div>
+
+            <div class="group">
+              <h2 class="q">몇 살 이신가요?</h2>
+              <label class="field">
+                <span class="arrow">›</span>
+                <input
+                  id="age"
+                  name="age"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  max="120"
+                  placeholder="나이를 입력해주세요"
+                />
+              </label>
+            </div>
+
+            <div class="group">
+              <h2 class="q">키가 몇인가요?</h2>
+              <label class="field">
+                <span class="arrow">›</span>
+                <input
+                  id="height"
+                  name="height"
+                  type="number"
+                  inputmode="decimal"
+                  step="0.1"
+                  min="50"
+                  max="250"
+                  placeholder="키를 입력해주세요"
+                />
+              </label>
+            </div>
+
+            <div class="group">
+              <h2 class="q">몸무게가 몇 인가요?</h2>
+              <label class="field">
+                <span class="arrow">›</span>
+                <input
+                  id="weight"
+                  name="weight"
+                  type="number"
+                  inputmode="decimal"
+                  step="0.1"
+                  min="10"
+                  max="300"
+                  placeholder="몸무게를 입력해주세요"
+                />
+              </label>
+            </div>
+
+            <div class="group">
+              <h2 class="q">성별을 알려주세요!</h2>
+              <!-- 기본은 모두 녹색, 선택 시 노란색 -->
+              <div class="chips" role="radiogroup" aria-label="성별">
+                <button
+                  class="chip"
+                  data-name="gender"
+                  data-value="male"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  남성
+                </button>
+                <button
+                  class="chip"
+                  data-name="gender"
+                  data-value="female"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  여성
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- slide 2 : 질병/알러지 -->
+        <article class="slide" aria-label="질병 및 알러지">
+          <div class="panel">
+            <div class="group">
+              <h2 class="q">앓고 있는 질병이 있나요?</h2>
+              <div class="chips" role="group" aria-label="질병">
+                <button class="chip" data-name="diseases" data-value="diabetes">
+                  당뇨
+                </button>
+                <button
+                  class="chip"
+                  data-name="diseases"
+                  data-value="hypertension"
+                >
+                  고혈압
+                </button>
+                <button
+                  class="chip"
+                  data-name="diseases"
+                  data-value="hyperlipidemia"
+                >
+                  고지혈증
+                </button>
+                <button class="chip" data-name="diseases" data-value="anemia">
+                  빈혈
+                </button>
+                <button
+                  class="chip"
+                  data-name="diseases"
+                  data-value="osteoporosis"
+                >
+                  골다공증
+                </button>
+                <button
+                  class="chip"
+                  data-name="diseases"
+                  data-value="none"
+                  data-none
+                >
+                  해당없음
+                </button>
+              </div>
+              <p class="note">
+                이외의 질병은 현재 도움을 드리기에 한계가 있어요
+              </p>
+            </div>
+
+            <div class="group">
+              <h2 class="q">알러지가 있나요?</h2>
+              <div class="chips" role="group" aria-label="알러지">
+                <button class="chip" data-name="allergies" data-value="egg">
+                  알류
+                </button>
+                <button class="chip" data-name="allergies" data-value="milk">
+                  우유
+                </button>
+                <button
+                  class="chip"
+                  data-name="allergies"
+                  data-value="buckwheat"
+                >
+                  메밀
+                </button>
+                <button class="chip" data-name="allergies" data-value="wheat">
+                  밀
+                </button>
+                <button class="chip" data-name="allergies" data-value="pine">
+                  잣
+                </button>
+                <button class="chip" data-name="allergies" data-value="walnut">
+                  호두
+                </button>
+                <button class="chip" data-name="allergies" data-value="crab">
+                  게
+                </button>
+                <button class="chip" data-name="allergies" data-value="shrimp">
+                  새우
+                </button>
+                <button class="chip" data-name="allergies" data-value="squid">
+                  오징어
+                </button>
+                <button
+                  class="chip"
+                  data-name="allergies"
+                  data-value="mackerel"
+                >
+                  고등어
+                </button>
+                <button
+                  class="chip"
+                  data-name="allergies"
+                  data-value="shellfish"
+                >
+                  조개류
+                </button>
+                <button class="chip" data-name="allergies" data-value="peach">
+                  복숭아
+                </button>
+                <button class="chip" data-name="allergies" data-value="tomato">
+                  토마토
+                </button>
+                <button class="chip" data-name="allergies" data-value="chicken">
+                  닭고기
+                </button>
+                <button class="chip" data-name="allergies" data-value="pork">
+                  돼지고기
+                </button>
+                <button class="chip" data-name="allergies" data-value="beef">
+                  소고기
+                </button>
+                <button class="chip" data-name="allergies" data-value="sulfite">
+                  아황산류
+                </button>
+                <button
+                  class="chip"
+                  data-name="allergies"
+                  data-value="none"
+                  data-none
+                >
+                  해당없음
+                </button>
+              </div>
+              <p class="note">
+                이외의 알러지는 현재 도움을 드리기에 한계가 있어요
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- slide 3 : 식습관 타입 -->
+        <article class="slide" aria-label="식습관 타입">
+          <div class="panel panel-center">
+            <div class="group center">
+              <h2 class="q">당신의 타입을 알려주세요!</h2>
+              <div
+                class="chips center"
+                role="radiogroup"
+                aria-label="식습관 타입"
+              >
+                <button
+                  class="chip"
+                  data-name="dietType"
+                  data-value="vegan"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  비건
+                </button>
+                <button
+                  class="chip"
+                  data-name="dietType"
+                  data-value="lacto"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  락토
+                </button>
+                <button
+                  class="chip"
+                  data-name="dietType"
+                  data-value="ovo"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  오보
+                </button>
+                <button
+                  class="chip"
+                  data-name="dietType"
+                  data-value="lacto-ovo"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  락토·오보
+                </button>
+                <button
+                  class="chip"
+                  data-name="dietType"
+                  data-value="pesco"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  페스코
+                </button>
+                <button
+                  class="chip"
+                  data-name="dietType"
+                  data-value="none"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  해당없음
+                </button>
+              </div>
+              <p class="note">
+                이외의 타입은 현재 도움을 드리기에 한계가 있어요
+              </p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 하단 고정: 페이지 점(항상 보임) -->
+      <div class="pager" aria-hidden="true">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+
+      <!-- 3번째에서만 보이는 완료 -->
+      <button id="submitBtn" class="btn-primary hidden" type="button">
+        완료
+      </button>
+    </main>
+  </body>
+</html>

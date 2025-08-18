@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>풀-log</title>
+
+    <!-- 확대 제한 -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- iOS PWA 옵션(선택) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <link rel="preload" as="image" href="images/avocado.svg" />
+    <link rel="preload" as="image" href="images/aws_logo.svg" />
+    <link rel="stylesheet" href="onboarding.css" />
+    <script defer src="onboarding.js"></script>
+  </head>
+  <body>
+    <main class="screen" aria-label="앱 온보딩">
+      <!-- 중앙 앱 로고 -->
+      <img class="logo logo-main" src="images/avocado.svg" alt="앱 로고" />
+
+      <!-- 하단 AWS 로고(장식적이면 alt 빈값으로) -->
+      <img class="logo logo-aws" src="images/aws_logo.svg" alt="aws" />
+    </main>
+
+    <!-- 다음 페이지 URL은 JS에서 설정(NEXT_URL) -->
+  </body>
+</html>

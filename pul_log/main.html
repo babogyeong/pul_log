@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>풀-log</title>
+
+    <!-- 확대 제한 -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" href="main.css" />
+    <script defer src="main.js"></script>
+  </head>
+  <body>
+    <main class="chat" aria-label="풀-log 대화">
+      <!-- 헤더 -->
+      <header class="header">
+        <div class="brand">
+          <!-- 로고 클릭 시 이동 -->
+          <a href="report.html" class="logo-link" aria-label="홈으로 이동">
+            <img class="logo" src="images/avodo_png.png" alt="아보도 로고" />
+          </a>
+          <h1 class="title">풀</h1>
+          <h1 class="title" style="color: #53351c">‑log</h1>
+        </div>
+      </header>
+
+      <!-- 메시지 영역 -->
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <!-- 입력 영역 -->
+      <footer class="composer" aria-label="메시지 작성">
+        <form id="form" autocomplete="off">
+          <label class="input-pill">
+            <span class="chev">›</span>
+            <textarea
+              id="input"
+              name="input"
+              placeholder="식단, 영양정보 등을 물어보세요!"
+              rows="1"
+              enterkeyhint="send"
+            ></textarea>
+          </label>
+
+          <!-- 화살표 버튼: Enter와 동일 기능 (중복 전송 방지) -->
+          <button id="sendBtn" class="send-btn" type="button" aria-label="전송">
+            <img id="send_arrow" src="images/arrow-up.svg" alt="" />
+          </button>
+        </form>
+      </footer>
+    </main>
+  </body>
+</html>
