@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const STORAGE_KEY = "chatHistory.v1"; // 저장 키
   const MAX_ITEMS = 200; // 보관 최대 메시지 수
 
+  const API_URL = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/chat_create"; // API Gateway Invoke URL
+  const USER_ID = "u123"; // 필요 시 로그인/쿠키 등으로 교체
+
   // 메모리 내 히스토리
   let history = loadHistory();
 
@@ -73,19 +76,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // 사용자 메시지 추가 + 저장
     addMessage({ role: "user", text });
 
-    // ▼ 추후 API 연결 위치 ▼
-    // sendToAssistant(text)
-    //   .then((ans) => addMessage({ role: "assistant", text: ans }))
-    //   .finally(() => (sending = false));
+  async function sendToAssistant(userText) {
+    const res = await fetch(API_URL, {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-user-id": USER_ID, // Lambda가 user_id 헤더로 받음
+      },
+      body: JSON.stringify({ text: userText }),
+    });
+    // 네트워크 오류 처리
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`API ${res.status}: ${errText || "network error"}`);
+    }
+    // Lambda의 표준 응답 파싱
+    const payload = await res.json();
+    // Lambda는 { ok, message, ... } 형태로 반환함
+    return payload.message || "(응답 없음)";
+  }
+    // 기존 setTimeout(...) 블록 제거하고 아래로 교체
+sendToAssistant(text)
+  .then((ans) => addMessage({ role: "assistant", text: ans }))
+  .catch((e) =>
+    addMessage({ role: "assistant", text: "통신 오류: " + String(e.message || e) })
+  )
+  .finally(() => (sending = false));
 
-    // 임시 예시 응답
-    setTimeout(() => {
-      addMessage({
-        role: "assistant",
-        text: "아직 AI 연결 전이라 예시 응답입니다.",
-      });
-      sending = false;
-    }, 250);
   }
 
   /* ---------- 메시지 추가 & 저장 ---------- */
