@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("input");
   const sendBtn = document.getElementById("sendBtn");
 
-  const STORAGE_KEY = "chatHistory.v1"; // 저장 키
+  const STORAGE_KEY = "chatHistory.v1"; // 저장  키
   const MAX_ITEMS = 200; // 보관 최대 메시지 수
 
   // 메모리 내 히스토리
