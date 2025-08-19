@@ -1,5 +1,5 @@
 /* API Gateway Invoke URL (HTTP API) */
-const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/";
+const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("backBtn")?.addEventListener("click", () => {
