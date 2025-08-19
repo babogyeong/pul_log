@@ -1,5 +1,5 @@
 /* ===== 설정 ===== */
-const NEXT_URL = "survey.html"; // 인트로 후 이동할 페이지 (원하는 파일로 변경)
+const NEXT_URL = "survey.html"; // 인트로 후 이동할  페이지 (원하는 파일로 변경)
 
 /* ===== DOM 준비 ===== */
 document.addEventListener("DOMContentLoaded", () => {
