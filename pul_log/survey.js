@@ -112,6 +112,7 @@ async function onSubmit() {
   let ok = false;
   try {
     const res = await fetch(API_ENDPOINT, {
+      mode: "cors",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
