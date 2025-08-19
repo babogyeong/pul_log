@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const MAX_ITEMS = 200; // 보관 최대 메시지 수
 
   const API_URL = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/chat_create"; // API Gateway Invoke URL
-  const USER_ID = "u123"; // 필요 시 로그인/쿠키 등으로 교체
+  const USER_ID = "abcd123456-789"; // 필요 시 로그인/쿠키 등으로 교체
 
   // 메모리 내 히스토리
   let history = loadHistory();
