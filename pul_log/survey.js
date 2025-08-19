@@ -124,6 +124,7 @@ async function onSubmit() {
 
   if (!ok) {
     try {
+      localStorage.clear();
       localStorage.setItem("surveyData", JSON.stringify(data));
       ok = true;
     } catch {}
