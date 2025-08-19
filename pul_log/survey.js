@@ -1,6 +1,6 @@
 /* ===== 설정 ===== */
 const NEXT_URL = "survey_end.html"; // 완료 후 이동할 페이지
-const API_ENDPOINT = "/api/survey"; // 서버 없으면 로컬스토리지 백업
+const API_ENDPOINT = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/manageProfile"; // 서버 없으면 로컬스토리지 백업
 
 /* ===== 엘리먼트 ===== */
 const track = document.getElementById("track");
@@ -114,7 +114,7 @@ async function onSubmit() {
     const res = await fetch(API_ENDPOINT, {
       mode: "cors",
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify(data),
     });
     ok = res.ok;
