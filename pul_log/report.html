@@ -1,69 +1,74 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>데일리 리포트</title>
+    <title>풀‑report</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+
     <link rel="stylesheet" href="report.css" />
   </head>
   <body>
     <main class="report">
-
-      <!-- 헤더 -->
       <header class="header">
-        <a id="backBtn" class="logo-link" href="javascript:void(0)">
-          <img class="logo" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f951.svg" alt="logo" />
+        <a
+          class="logo-link"
+          href="javascript:void(0)"
+          aria-label="이전으로"
+          id="backBtn"
+        >
+          <img class="logo" src="images/avodo_png.png" alt="아보도 로고" />
         </a>
-        <h1 class="brand">나의 영양 리포트</h1>
+        <h1 class="brand" style="color: #4d7c54">풀</h1>
+        <h1 class="brand" style="color: #53351c">‑report</h1>
       </header>
 
-      <!-- [1] 메인 도넛 -->
       <section class="card">
-        <h2 class="section-title">오늘의 영양 비율</h2>
-
-        <div class="chart-wrap donut-box">
-          <svg id="pie" class="donut" viewBox="0 0 240 240" aria-label="영양 도넛 차트"></svg>
-          <div class="donut-center">
-            <div class="kcals"><span id="kcalNow">0</span> / <span id="kcalGoal">0</span> kcal</div>
-          </div>
+        <h2 class="section-title">오늘 먹은 영양소</h2>
+        <div class="chart-wrap">
+          <svg
+            id="pie"
+            viewBox="0 0 200 200"
+            role="img"
+            aria-label="영양소 비율 차트"
+          ></svg>
         </div>
-
-        <!-- [2] 작은 원형 게이지 3개 -->
-        <ul class="mini-rings">
-          <li>
-            <div id="ringCarb" class="ring" aria-label="탄수화물">
-              <span class="pct" id="pctCarb">0%</span>
-            </div>
-            <span class="label">탄수</span>
-          </li>
-          <li>
-            <div id="ringProtein" class="ring" aria-label="단백질">
-              <span class="pct" id="pctProtein">0%</span>
-            </div>
-            <span class="label">단백질</span>
-          </li>
-          <li>
-            <div id="ringFat" class="ring" aria-label="지방">
-              <span class="pct" id="pctFat">0%</span>
-            </div>
-            <span class="label">지방</span>
-          </li>
+        <ul class="legend" aria-label="영양소 범례">
+          <li><span class="dot c-carb"></span>탄수화물</li>
+          <li><span class="dot c-prot"></span>단백질</li>
+          <li><span class="dot c-fat"></span>지방</li>
         </ul>
       </section>
+      
+      <section class="card">
+        <h2 class="section-title">오늘 먹은 칼로리</h2>
+        <p class="kcals">
+          <span id="kcalNow">0</span>kcal / <span id="kcalGoal">0</span>kcal
+        </p>
+      </section>
 
-      <!-- [3] 부영양소 충족도 -->
       <section class="card">
         <h2 class="section-title">세부 충족도</h2>
         <ul id="microGrid" class="micro-grid"></ul>
-        <p class="legend">상=충분 / 중=보통 / 하=부족(또는 과다)</p>
+        <p class="legend" style="font-size: 12px; color: var(--muted); justify-content: flex-start;">
+            상=충분 / 중=보통 / 하=부족(또는 과다)
+        </p>
       </section>
 
-      <!-- [4] 추천 -->
       <section class="card rec">
-        <h2 class="section-title">코치의 한마디</h2>
-        <p class="bubble" id="recText">추천을 준비 중이에요!</p>
+        <h2 class="section-title">식사 추천</h2>
+        <div class="bubble" id="recText">데이터를 불러오는 중...</div>
+        <img
+          class="mascot"
+          src="images/avocado.svg"
+          alt=""
+          aria-hidden="true"
+        />
       </section>
-
     </main>
     <script src="report.js"></script>
   </body>
