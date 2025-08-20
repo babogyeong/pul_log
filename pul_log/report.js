@@ -269,3 +269,8 @@ function preventZoom() {
   document.addEventListener("touchend", (e) => { const now = Date.now(); if (now - last <= 350) e.preventDefault(); last = now; }, { passive: false });
   window.addEventListener("wheel", (e) => { if (e.ctrlKey || e.metaKey) e.preventDefault(); }, { passive: false });
 }
+
+function toComma(n) {
+  const v = Number(n) || 0;
+  return v.toLocaleString("ko-KR");
+}
