@@ -1,5 +1,5 @@
 /* ===========================
- *  report.js (Daily Report)
+ * report.js (Daily Report)
  * =========================== */
 
 /* API Gateway Invoke URL (Stage까지) — 끝 슬래시 없음 */
@@ -73,11 +73,12 @@ async function loadAndRender() {
   }
 }
 
-/* ------------------- API 호출부 ------------------- */
+/* ------------------- API 호출부 (경로 수정됨) ------------------- */
 /** GET 우선, 실패 시 POST 폴백 — 모두 user_id를 포함 */
 async function getOrCreateReport(userId, dateStr) {
-  // 1) GET (사전요청 없는 단순 쿼리) — CORS 회피
-  const getUrl = `${API_BASE}/getDailyReportLambda?user_id=${encodeURIComponent(
+  // 1) GET (사전요청 없는 단순 쿼리)
+  // ★★★ 경로 수정: /getDailyReportLambda -> /reports/today ★★★
+  const getUrl = `${API_BASE}/reports/today?user_id=${encodeURIComponent(
     userId
   )}&date=${encodeURIComponent(dateStr)}`;
 
@@ -97,7 +98,8 @@ async function getOrCreateReport(userId, dateStr) {
   }
 
   // 2) POST (바디 전달)
-  const postUrl = `${API_BASE}/getDailyReportLambda`;
+  // ★★★ 경로 수정: /getDailyReportLambda -> /reports/generate ★★★
+  const postUrl = `${API_BASE}/reports/generate`;
   const res2 = await fetch(postUrl, {
     method: "POST",
     mode: "cors",
@@ -116,6 +118,7 @@ async function getOrCreateReport(userId, dateStr) {
 
   return await parseApiResponse(res2);
 }
+
 
 /** Lambda가 body 문자열/객체 어느 쪽이든 대응 */
 async function parseApiResponse(res) {
@@ -150,9 +153,9 @@ function renderPie(macroRatio) {
 
   const total = carb + protein + fat || 1; // 0분모 방지
   const parts = [
-    { key: "탄수화물", value: carb / total, color: getCSS("--carb") },
-    { key: "단백질", value: protein / total, color: getCSS("--prot") },
-    { key: "지방", value: fat / total, color: getCSS("--fat") },
+    { key: "탄수화물", value: carb / total, color: getCSS("--c-carb") },
+    { key: "단백질", value: protein / total, color: getCSS("--c-prot") },
+    { key: "지방", value: fat / total, color: getCSS("--c-fat") },
   ];
 
   // SVG 파이
