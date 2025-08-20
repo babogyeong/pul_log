@@ -1,8 +1,8 @@
 @font-face {
-  font-family: "Pretendard-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-    format("woff");
-  font-weight: 400;
+  font-family: "HakgyoansimDunggeunmisoTTF-B";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2")
+    format("woff2");
+  font-weight: 700;
   font-style: normal;
 }
 
@@ -84,6 +84,7 @@ body {
   font-weight: 900;
   letter-spacing: 0.2px;
   color: #4d7c54;
+  font-family: "HakgyoansimDunggeunmisoTTF-B"
 }
 
 /* 메시지 영역 */
