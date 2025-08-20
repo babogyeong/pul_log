@@ -1,75 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <title>풀‑report</title>
-
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <meta name="format-detection" content="telephone=no" />
-
+    <title>일일 리포트</title>
     <link rel="stylesheet" href="report.css" />
   </head>
   <body>
-    <main class="report">
-      <header class="header">
-        <a
-          class="logo-link"
-          href="javascript:void(0)"
-          aria-label="이전으로"
-          id="backBtn"
-        >
-          <img class="logo" src="images/avodo_png.png" alt="아보도 로고" />
-        </a>
-        <h1 class="brand" style="color: #4d7c54">풀</h1>
-        <h1 class="brand" style="color: #53351c">‑report</h1>
-      </header>
+    <header class="topbar">
+      <button id="backBtn" class="back">← 돌아가기</button>
+      <h1 class="title">일일 분석 리포트</h1>
+      <div class="spacer"></div>
+    </header>
 
-      <section class="card">
-        <h2 class="section-title">오늘 먹은 영양소</h2>
-        <div class="chart-wrap">
-          <svg
-            id="pie"
-            viewBox="0 0 200 200"
-            role="img"
-            aria-label="영양소 비율 차트"
-          ></svg>
+    <main class="container">
+      <section class="row head">
+        <div class="date-wrap">
+          <label for="dateInput">날짜</label>
+          <input id="dateInput" type="date" />
+          <button id="reloadBtn" class="primary">불러오기</button>
         </div>
-        <ul class="legend" aria-label="영양소 범례">
-          <li><span class="dot c-carb"></span>탄수화물</li>
-          <li><span class="dot c-prot"></span>단백질</li>
-          <li><span class="dot c-fat"></span>지방</li>
-        </ul>
-      </section>
-      
-      <section class="card">
-        <h2 class="section-title">오늘 먹은 칼로리</h2>
-        <p class="kcals">
-          <span id="kcalNow">0</span>kcal / <span id="kcalGoal">0</span>kcal
-        </p>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title">세부 충족도</h2>
-        <ul id="microGrid" class="micro-grid"></ul>
-        <p class="legend" style="font-size: 12px; color: var(--muted); justify-content: flex-start;">
-            상=충분 / 중=보통 / 하=부족(또는 과다)
-        </p>
+        <div class="kcal-wrap">
+          <div class="kcal-box">
+            <div class="kcal-label">오늘 섭취 칼로리</div>
+            <div class="kcal-values">
+              <span id="kcalNow">0</span>
+              <span class="sep">/</span>
+              <span id="kcalGoal">0</span>
+              <span class="unit">kcal</span>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="card rec">
-        <h2 class="section-title">식사 추천</h2>
-        <div class="bubble" id="recText">데이터를 불러오는 중...</div>
-        <img
-          class="mascot"
-          src="images/avocado.svg"
-          alt=""
-          aria-hidden="true"
-        />
+      <section class="row chart">
+        <h2 class="section-title">탄/단/지 비율</h2>
+        <div id="pie" class="chart-wrap" aria-label="탄단지 파이차트"></div>
+        <ul id="legend" class="legend"></ul>
+      </section>
+
+      <section class="row micro">
+        <h2 class="section-title">부영양소 충족도</h2>
+        <div id="microGrid" class="micro-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="row rec">
+        <h2 class="section-title">맞춤 추천</h2>
+        <p id="recText" class="rec-text">추천을 준비 중이에요!</p>
       </section>
     </main>
+
     <script src="report.js"></script>
   </body>
 </html>
