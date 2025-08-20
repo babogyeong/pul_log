@@ -13,7 +13,7 @@
   font-style: normal;
 }
 
-/* 원본 테마 적용 */
+/* 원본 테마 */
 :root {
   --bg: #b4d3a1;
   --panel: #cdeab7;
@@ -22,64 +22,32 @@
   --muted: #1f5b3fb3;
   --green: #2b6d46;
   --green-700: #2a5b40;
-
-  /* 메인 색상(탄/단/지) */
   --c-carb: #2c5532;
   --c-prot: #4d7c54;
   --c-fat: #67a570;
-
-  /* 상태 색 (세부 충족도용) */
-  --lv-high: #2c5532; /* 상 */
-  --lv-mid: #f0b429;  /* 중 */
-  --lv-low: #d64545;  /* 하 */
-
   --shadow: 0 2px 0 #2a5b4026;
+  --lv-high: #2c5532;
+  --lv-mid: #f0b429;
+  --lv-low: #d64545;
 }
 
-* {
-  box-sizing: border-box;
-}
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: Pretendard, "Pretendard-Regular", system-ui, -apple-system,
     "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
 }
-.report {
-  min-height: 100svh;
-  padding: clamp(14px, 4vw, 24px);
-}
+.report { min-height: 100svh; padding: clamp(14px, 4vw, 24px); }
 
-/* 헤더 (원본 스타일) */
-.header {
-  display: flex;
-  align-items: center;
-  margin-bottom: clamp(12px, 3vh, 20px);
-}
-.logo {
-  width: clamp(28px, 7vw, 36px);
-  height: auto;
-  margin-right: 15px;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-.logo-link {
-  display: inline-flex;
-  align-items: center;
-}
-.brand {
-  margin: 0;
-  font-size: clamp(18px, 6vw, 26px);
-  font-weight: 600;
-  font-family: "HakgyoansimDunggeunmisoTTF-B";
-}
+/* 헤더 */
+.header { display: flex; align-items: center; margin-bottom: clamp(12px, 3vh, 20px); }
+.logo { width: clamp(28px, 7vw, 36px); height: auto; margin-right: 15px; user-select: none; -webkit-user-drag: none; }
+.logo-link { display: inline-flex; align-items: center; }
+.brand { margin: 0; font-size: clamp(18px, 6vw, 26px); font-weight: 600; font-family: "HakgyoansimDunggeunmisoTTF-B"; }
 
-/* 카드 (원본 스타일) */
+/* 카드 */
 .card {
   background: var(--panel);
   border-radius: 16px;
@@ -96,108 +64,27 @@ body {
   font-family: "HakgyoansimDunggeunmisoTTF-B";
 }
 
-/* 파이차트 */
-.chart-wrap {
-  width: 100%;
-  max-width: min(520px, 92vw);
-  margin: clamp(6px, 1vh, 12px) auto;
-}
-
-/* 칼로리 */
-.kcals {
-  margin: 0;
-  font-weight: 900;
-  font-size: clamp(22px, 7vw, 32px);
-  letter-spacing: 0.2px;
-  font-family: "HakgyoansimDunggeunmisoTTF-B";
-}
-
-/* 범례 (원본 스타일) */
-.legend {
-  list-style: none;
-  display: flex;
-  gap: 16px;
-  padding: 0;
-  margin: 6px auto 0;
-  justify-content: center;
-  color: var(--green-700);
-  font-weight: 700;
-  font-size: 14px;
-}
-.legend .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 6px;
-  box-shadow: inset 0 0 0 1px #0002;
-}
+/* 파이차트 & 범례 */
+.chart-wrap { width: 100%; max-width: min(520px, 92vw); margin: clamp(6px, 1vh, 12px) auto; }
+.legend { list-style: none; display: flex; gap: 16px; padding: 0; margin: 6px auto 0; justify-content: center; color: var(--green-700); font-weight: 700; font-size: 14px; }
+.legend .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: inset 0 0 0 1px #0002; }
 .c-carb { background: var(--c-carb); }
 .c-prot { background: var(--c-prot); }
 .c-fat { background: var(--c-fat); }
 
+/* 칼로리 */
+.kcals { margin: 0; font-weight: 900; font-size: clamp(22px, 7vw, 32px); letter-spacing: 0.2px; font-family: "HakgyoansimDunggeunmisoTTF-B"; }
 
-/* 부영양소 상태 그리드 (기존 기능 유지 + 원본 테마 적용) */
-.micro-grid {
-  list-style: none;
-  margin: 10px 0 4px;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-  gap: 12px;
-}
-.micro-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-.state-dot {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  color: #fff;
-  border: 2px solid #1f382b33;
-}
+/* 세부 충족도 그리드 */
+.micro-grid { list-style: none; margin: 10px 0 4px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 12px; }
+.micro-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.state-dot { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; border: 2px solid #1f382b33; }
 .state-high { background: var(--lv-high); }
 .state-mid { background: var(--lv-mid); color: #3b2a00; }
 .state-low { background: var(--lv-low); }
+.micro-label { font-size: 13px; font-weight: 800; color: var(--green-700); text-align: center; }
 
-.micro-label {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--green-700);
-  text-align: center;
-}
-
-/* 추천 말풍선 & 마스코트 (원본 스타일) */
-.rec {
-  position: relative;
-  overflow: hidden;
-}
-.bubble {
-  display: inline-block;
-  background: var(--pill);
-  border: 2px solid var(--green);
-  color: var(--green-700);
-  font-weight: 900;
-  border-radius: 999px;
-  padding: 14px 18px;
-  max-width: calc(100% - 100px); /* 마스코트와 겹치지 않게 */
-  margin: 0;
-  font-family: "HakgyoansimDunggeunmisoTTF-B";
-}
-.mascot {
-  position: absolute;
-  right: clamp(6px, 2vw, 16px);
-  bottom: clamp(-10px, 2vh, 0px);
-  width: clamp(84px, 22vw, 140px);
-  transform: rotate(-10deg);
-  user-select: none;
-  -webkit-user-drag: none;
-  pointer-events: none;
-}
+/* 추천 말풍선 & 마스코트 */
+.rec { position: relative; overflow: hidden; }
+.bubble { display: inline-block; background: var(--pill); border: 2px solid var(--green); color: var(--green-700); font-weight: 900; border-radius: 999px; padding: 14px 18px; max-width: calc(100% - 100px); margin: 0; font-family: "HakgyoansimDunggeunmisoTTF-B"; }
+.mascot { position: absolute; right: clamp(6px, 2vw, 16px); bottom: clamp(-10px, 2vh, 0px); width: clamp(84px, 22vw, 140px); transform: rotate(-10deg); user-select: none; -webkit-user-drag: none; pointer-events: none; }
