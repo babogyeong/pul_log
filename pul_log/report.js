@@ -5,8 +5,8 @@
 /* API Gateway Invoke URL (Stage까지) — 끝 슬래시 없음 */
 const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
 
-/* 선택: 사용자 ID 보관 방식 */
-const USER_ID = (localStorage.getItem("userId") || "demo");
+/* ✅ 항상 이 사용자만 사용 */
+const USER_ID = "abcd123456-789";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("backBtn")?.addEventListener("click", () => {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadAndRender() {
   const dateStr = getDateFromURL() || todayStr();
 
-  // 0) 초기 표시
+  // 초기 표시
   setText("kcalNow", "0");
   setText("kcalGoal", "0");
   setText("recText", "추천을 준비 중이에요!");
@@ -33,18 +33,16 @@ async function loadAndRender() {
   renderRings({ carb: 0, protein: 0, fat: 0 });
   renderMicroGrid({});
 
-  // 1) 데이터 호출 (GET → 실패 시 POST 생성 → GET 재시도)
+  // 데이터 호출 (GET → 실패 시 POST 생성 → GET 재시도)
   const data = await getOrCreateReport(USER_ID, dateStr);
-  if (!data) return; // 네트워크/404 등
+  if (!data) return;
 
-  // 2) 응답 스키마 호환 처리
   const macros   = data.macros ?? data.macroRatio ?? { carb: 0, protein: 0, fat: 0 };
   const kcalNow  = Number(data.kcalNow ?? data.totalCalories ?? 0);
   const kcalGoal = Number(data.kcalGoal ?? 2000);
   const rec      = data.recommendation ?? data.summaryLine ?? "추천을 준비 중이에요!";
   const micro    = data.micro ?? data.microStatus12 ?? {};
 
-  // 3) 표시
   setText("kcalNow", toComma(Math.round(kcalNow)));
   setText("kcalGoal", toComma(Math.round(kcalGoal)));
   setText("recText", rec);
@@ -64,14 +62,10 @@ async function loadAndRender() {
 
 /* ------------------- API ------------------- */
 async function getOrCreateReport(userId, dateStr) {
-  // 1차: GET
   let data = await callGetReport(userId, dateStr);
   if (data) return data;
 
-  // 2차: POST로 생성 시도
   await callPostReport(userId, dateStr).catch(() => null);
-
-  // 3차: 다시 GET
   data = await callGetReport(userId, dateStr);
   return data || null;
 }
@@ -118,7 +112,6 @@ function renderPie({ carb = 0, protein = 0, fat = 0 }) {
   const svg = document.getElementById("pie");
   if (!svg) return;
 
-  // 정규화
   const total = Math.max(1, carb + protein + fat);
   const frac = [
     { key: "carb",    val: carb    / total, color: getCSS("--c-carb") },
@@ -126,15 +119,12 @@ function renderPie({ carb = 0, protein = 0, fat = 0 }) {
     { key: "fat",     val: fat     / total, color: getCSS("--c-fat")  },
   ];
 
-  // 초기화
   while (svg.firstChild) svg.removeChild(svg.firstChild);
 
-  // 파라미터
   const cx = 110, cy = 110;
-  const rOuter = 100, rInner = 68; // 두께 약 32
-  let start = -90; // 12시 시작
+  const rOuter = 100, rInner = 68;
+  let start = -90;
 
-  // 각 조각
   for (const part of frac) {
     const deg = part.val * 360;
     const end = start + deg;
@@ -146,7 +136,6 @@ function renderPie({ carb = 0, protein = 0, fat = 0 }) {
     start = end;
   }
 
-  // 경계선(안쪽, 바깥쪽)
   const ringStroke = "#0000001f";
   svg.appendChild(elNS("circle", { cx, cy, r: rOuter, fill: "none", stroke: ringStroke, "stroke-width": 1 }));
   svg.appendChild(elNS("circle", { cx, cy, r: rInner, fill: "none", stroke: ringStroke, "stroke-width": 1 }));
