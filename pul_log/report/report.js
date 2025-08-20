@@ -171,7 +171,7 @@ async function loadAndRender() {
     data.macroRatio ?? { carb: 0, protein: 0, fat: 0 };
 
   const kcalNow = Number(data.kcalNow ?? data.totalCalories ?? 0);
-  const kcalGoal = Number(data.kcalGoal ?? (data.targets?.energy_kcal ?? 2000));
+  const kcalGoal = Number(data.kcalGoal ?? (data.targets?.energy_kcal ?? 3000));
   const rec = data.recommendation ?? data.summaryLine ?? "식단 정보를 더 쌓아 보세요!";
   const micro = data.micro ?? data.microStatus12 ?? {};
 
