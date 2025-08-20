@@ -1,6 +1,8 @@
 /* ===== 설정 ===== */
 const NEXT_URL = "survey_end.html"; // 완료 후 이동할 페이지
 const API_ENDPOINT = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/manageProfile"; // 서버 없으면 로컬스토리지 백업
+const USER_ID = "abcd123456-789"; // report.js와 동일한 고정 사용자 ID
+
 
 /* ===== 엘리먼트 ===== */
 const track = document.getElementById("track");
@@ -114,25 +116,31 @@ async function onSubmit() {
     const res = await fetch(API_ENDPOINT, {
       mode: "cors",
       method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "x-user-id": USER_ID // Lambda가 인식할 수 있도록 헤더에 사용자 ID 추가
+      },
       body: JSON.stringify(data),
     });
-    ok = res.ok;
-  } catch {
-    ok = false;
-  }
 
-  if (!ok) {
-    try {
-      localStorage.clear();
-      localStorage.setItem("surveyData", JSON.stringify(data));
-      ok = true;
-    } catch {}
+    if (res.ok) {
+      // 성공 시 다음 페이지로 이동
+      window.location.assign(NEXT_URL);
+    } else {
+      // 서버에서 4xx, 5xx 에러를 반환한 경우
+      const errorData = await res.json().catch(() => ({ message: "알 수 없는 오류" }));
+      throw new Error(errorData.message || "서버에서 오류가 발생했습니다.");
+    }
+  } catch (error) {
+    // 네트워크 오류 또는 위에서 발생시킨 에러 처리
+    alert(`전송에 실패했어요. 네트워크 상태를 확인해주세요.\n(${error.message})`);
+    // 로딩 상태 해제
+    submitBtn.disabled = false;
+    submitBtn.textContent = "완료";
   }
-
-  if (ok) window.location.assign(NEXT_URL);
-  else alert("전송에 실패했어요. 네트워크 상태를 확인해주세요.");
 }
+
 
 /* ===== 데이터 수집 & 검증 ===== */
 function collectData() {
