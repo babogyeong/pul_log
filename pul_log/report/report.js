@@ -1,10 +1,10 @@
-/* API Gateway Invoke URL (HTTP API) */
-const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/";
+/* ★★★ 수정된 부분: URL 끝의 / 제거 ★★★ */
+const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("backBtn")?.addEventListener("click", () => {
     if (history.length > 1) history.back();
-    else location.href = "main.html"; // 기본 이동 페이지
+    else location.href = "main.html";
   });
 
   loadAndRender();
@@ -37,7 +37,7 @@ async function loadAndRender() {
   document.getElementById("recText").textContent = rec;
 }
 
-/* ------------------- 파이차트(SVG) - 원본 로직 ------------------- */
+/* ------------------- 파이차트(SVG) ------------------- */
 function renderPie({ carb = 0, protein = 0, fat = 0 }) {
   const svg = document.getElementById("pie");
   if (!svg) return;
@@ -84,7 +84,7 @@ function renderPie({ carb = 0, protein = 0, fat = 0 }) {
   });
 }
 
-/* ------------------- 세부 충족도 렌더 (기능 유지) ------------------- */
+/* ------------------- 세부 충족도 렌더 ------------------- */
 const MICRO_LABELS = {
   sodium: "나트륨", potassium: "칼륨", calcium: "칼슘",
   fiber: "식이섬유", phosphorus: "인", vit_b12: "B12",
@@ -113,7 +113,7 @@ function renderMicroGridFromLambda(micro = {}) {
   });
 }
 
-/* ------------------- 서버 호출 (기능 유지) ------------------- */
+/* ------------------- 서버 호출 ------------------- */
 async function getOrCreateReport() {
   const userId = localStorage.getItem("vegan_user_id") || "demo";
   const d = new Date();
