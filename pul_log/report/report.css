@@ -1,61 +1,153 @@
 @font-face {
   font-family: "Pretendard-Regular";
   src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-    format("woff");
+      format("woff");
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
   font-family: "HakgyoansimDunggeunmisoTTF-B";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2")
-    format("woff2");
+      format("woff2");
   font-weight: 700;
   font-style: normal;
 }
 
-/* 원본 테마 */
 :root {
-  --bg: #b4d3a1;
-  --panel: #cdeab7;
-  --pill: #f6f4a6;
-  --text: #1f5b3f;
-  --muted: #1f5b3fb3;
-  --green: #2b6d46;
-  --green-700: #2a5b40;
-  --c-carb: #2c5532;
-  --c-prot: #4d7c54;
-  --c-fat: #67a570;
-  --shadow: 0 2px 0 #2a5b4026;
-  --lv-high: #2c5532;
-  --lv-mid: #f0b429;
-  --lv-low: #d64545;
+  --bg: #f2f6f1;
+  --panel: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+
+  --green-700: #166534;
+  --green-500: #22c55e;
+  --green-100: #dcfce7;
+
+  --carb: #60a5fa;
+  --prot: #34d399;
+  --fat: #fbbf24;
+
+  --border: #e5e7eb;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; }
 body {
+  margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: Pretendard, "Pretendard-Regular", system-ui, -apple-system,
-    "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  font-family: Pretendard-Regular, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple SD Gothic Neo",
+    "Malgun Gothic", "Noto Sans KR", sans-serif;
 }
-.report { min-height: 100svh; padding: clamp(14px, 4vw, 24px); }
 
-/* 헤더 */
-.header { display: flex; align-items: center; margin-bottom: clamp(12px, 3vh, 20px); }
-.logo { width: clamp(28px, 7vw, 36px); height: auto; margin-right: 15px; user-select: none; -webkit-user-drag: none; }
-.logo-link { display: inline-flex; align-items: center; }
-.brand { margin: 0; font-size: clamp(18px, 6vw, 26px); font-weight: 600; font-family: "HakgyoansimDunggeunmisoTTF-B"; }
-
-/* 카드 */
-.card {
+.topbar {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
   background: var(--panel);
-  border-radius: 16px;
+  border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
-  border: 1px solid #2a5b4044;
-  padding: clamp(14px, 4vw, 22px);
-  margin-top: clamp(12px, 3vh, 20px);
+  z-index: 10;
 }
+.topbar .title {
+  margin: 0;
+  font-size: clamp(16px, 4.4vw, 20px);
+  font-weight: 700;
+}
+.topbar .back {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.topbar .spacer { width: 36px; }
+
+.container {
+  max-width: 820px;
+  margin: 14px auto 40px;
+  padding: 0 14px;
+}
+
+.row {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(14px, 2.2vh, 18px);
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+}
+
+.row.head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 680px) {
+  .row.head { grid-template-columns: 1fr 1fr; }
+}
+
+.date-wrap {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+}
+.date-wrap label {
+  display: block;
+  font-weight: 700;
+  margin-right: 8px;
+}
+#dateInput {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.primary {
+  appearance: none;
+  border: none;
+  background: var(--green-700);
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.kcal-wrap { display: flex; align-items: center; justify-content: center; }
+.kcal-box {
+  width: 100%;
+  background: var(--green-100);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+}
+.kcal-label {
+  color: var(--green-700);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.kcal-values {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 900;
+  color: var(--green-700);
+}
+.kcal-values #kcalNow { font-size: clamp(20px, 6vw, 34px); }
+.kcal-values .sep { opacity: 0.6; }
+.kcal-values #kcalGoal { font-size: clamp(18px, 5vw, 28px); color: var(--muted); }
+.kcal-values .unit { font-size: 14px; color: var(--muted); margin-left: 4px; }
+
 .section-title {
   margin: 0 0 clamp(8px, 1.2vh, 12px);
   font-size: clamp(16px, 4.6vw, 20px);
@@ -66,25 +158,29 @@ body {
 
 /* 파이차트 & 범례 */
 .chart-wrap { width: 100%; max-width: min(520px, 92vw); margin: clamp(6px, 1vh, 12px) auto; }
-.legend { list-style: none; display: flex; gap: 16px; padding: 0; margin: 6px auto 0; justify-content: center; color: var(--green-700); font-weight: 700; font-size: 14px; }
-.legend .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: inset 0 0 0 1px #0002; }
-.c-carb { background: var(--c-carb); }
-.c-prot { background: var(--c-prot); }
-.c-fat { background: var(--c-fat); }
+.legend { list-style: none; padding: 0; margin: 4px auto 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; max-width: 520px; }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.legend .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
 
-/* 칼로리 */
-.kcals { margin: 0; font-weight: 900; font-size: clamp(22px, 7vw, 32px); letter-spacing: 0.2px; font-family: "HakgyoansimDunggeunmisoTTF-B"; }
+/* 부영양소 그리드 */
+.micro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media (min-width: 520px) { .micro-grid { grid-template-columns: repeat(3, 1fr); } }
+.micro-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+}
+.micro-item .name { font-weight: 700; }
+.micro-item .status { font-size: 13px; color: var(--muted); }
+.progress {
+  margin-top: 6px;
+  height: 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+.progress > span { display: block; height: 100%; background: var(--green-500); }
 
-/* 세부 충족도 그리드 */
-.micro-grid { list-style: none; margin: 10px 0 4px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 12px; }
-.micro-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.state-dot { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; border: 2px solid #1f382b33; }
-.state-high { background: var(--lv-high); }
-.state-mid { background: var(--lv-mid); color: #3b2a00; }
-.state-low { background: var(--lv-low); }
-.micro-label { font-size: 13px; font-weight: 800; color: var(--green-700); text-align: center; }
-
-/* 추천 말풍선 & 마스코트 */
-.rec { position: relative; overflow: hidden; }
-.bubble { display: inline-block; background: var(--pill); border: 2px solid var(--green); color: var(--green-700); font-weight: 900; border-radius: 999px; padding: 14px 18px; max-width: calc(100% - 100px); margin: 0; font-family: "HakgyoansimDunggeunmisoTTF-B"; }
-.mascot { position: absolute; right: clamp(6px, 2vw, 16px); bottom: clamp(-10px, 2vh, 0px); width: clamp(84px, 22vw, 140px); transform: rotate(-10deg); user-select: none; -webkit-user-drag: none; pointer-events: none; }
+/* 추천 */
+.rec-text { margin: 0; line-height: 1.6; }
