@@ -1,10 +1,29 @@
-/* ★★★ 수정된 부분: URL 끝의 / 제거 ★★★ */
-const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
+/* ===========================
+ *  report.js (Daily Report)
+ * =========================== */
+
+/* API Gateway Invoke URL (Stage까지) — 끝 슬래시 없음 */
+const API_BASE =
+  "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
+
+/* 고정 사용자 (요청 사항) — 이 사용자 데이터만 DynamoDB에서 사용 */
+const USER_ID = "abcd123456-789";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("backBtn")?.addEventListener("click", () => {
     if (history.length > 1) history.back();
     else location.href = "main.html";
+  });
+
+  const dateInput = document.getElementById("dateInput");
+  dateInput.value = getDateFromURL() || todayStr();
+
+  document.getElementById("reloadBtn")?.addEventListener("click", () => {
+    const d = dateInput.value || todayStr();
+    const url = new URL(location.href);
+    url.searchParams.set("date", d);
+    history.replaceState(null, "", url.toString());
+    loadAndRender();
   });
 
   loadAndRender();
@@ -16,141 +35,295 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* ------------------- 메인 렌더 ------------------- */
 async function loadAndRender() {
-  const data = await getOrCreateReport().catch(() => null);
+  const dateStr = getDateFromURL() || todayStr();
 
-  const macros = data?.macroRatio ?? { carb: 0, protein: 0, fat: 0 };
-  const kcalNow = Number(data?.totalCalories ?? 0);
-  const kcalGoal = 2000;
-  const rec = data?.summaryLine ?? "추천을 준비 중이에요!";
+  // 초기 표시
+  setText("kcalNow", "0");
+  setText("kcalGoal", "0");
+  setText("recText", "추천을 준비 중이에요!");
+  clearNode(document.getElementById("pie"));
+  clearNode(document.getElementById("legend"));
+  clearNode(document.getElementById("microGrid"));
 
-  renderPie({
-    carb: Number(macros.carb || 0),
-    protein: Number(macros.protein || 0),
-    fat: Number(macros.fat || 0),
-  });
-  
-  document.getElementById("kcalNow").textContent = toComma(kcalNow);
-  document.getElementById("kcalGoal").textContent = toComma(kcalGoal);
+  try {
+    const data = await getOrCreateReport(USER_ID, dateStr);
 
-  renderMicroGridFromLambda(data?.microStatus || {});
-  
-  document.getElementById("recText").textContent = rec;
+    const {
+      summaryLine = "추천을 준비 중이에요!",
+      macroRatio = { carb: 0, protein: 0, fat: 0 },
+      totalCalories = { now: 0, goal: 0 },
+      microStatus = [], // [{name, ratio(0~1), level:'상|중|하'}]
+    } = data || {};
+
+    // 칼로리
+    setText("kcalNow", toComma(totalCalories.now || 0));
+    setText("kcalGoal", toComma(totalCalories.goal || 0));
+
+    // 추천 문장
+    setText("recText", summaryLine || "추천을 준비 중이에요!");
+
+    // 탄단지 파이차트
+    renderPie(macroRatio);
+
+    // 부영양소 그리드
+    renderMicro(microStatus);
+  } catch (err) {
+    console.error("[loadAndRender] failed:", err);
+    setText("recText", "리포트를 불러오는 중 오류가 발생했습니다.");
+  }
 }
 
-/* ------------------- 파이차트(SVG) ------------------- */
-function renderPie({ carb = 0, protein = 0, fat = 0 }) {
-  const svg = document.getElementById("pie");
-  if (!svg) return;
+/* ------------------- API 호출부 ------------------- */
+/** GET 우선, 실패 시 POST 폴백 — 모두 user_id를 포함 */
+async function getOrCreateReport(userId, dateStr) {
+  // 1) GET (사전요청 없는 단순 쿼리) — CORS 회피
+  const getUrl = `${API_BASE}/getDailyReportLambda?user_id=${encodeURIComponent(
+    userId
+  )}&date=${encodeURIComponent(dateStr)}`;
 
-  const total = Math.max(1, carb + protein + fat);
+  let res;
+  try {
+    res = await fetch(getUrl, {
+      method: "GET",
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-cache",
+    });
+
+    if (res.ok) return await parseApiResponse(res);
+    // 404/405/500 등은 POST로 재시도
+  } catch (e) {
+    // 네트워크 실패 시 POST 폴백
+  }
+
+  // 2) POST (바디 전달)
+  const postUrl = `${API_BASE}/getDailyReportLambda`;
+  const res2 = await fetch(postUrl, {
+    method: "POST",
+    mode: "cors",
+    credentials: "omit",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user_id: userId, date: dateStr }),
+  });
+
+  if (!res2.ok) {
+    const text = await res2.text().catch(() => "");
+    throw new Error(`[POST] ${res2.status} ${res2.statusText} :: ${text}`);
+  }
+
+  return await parseApiResponse(res2);
+}
+
+/** Lambda가 body 문자열/객체 어느 쪽이든 대응 */
+async function parseApiResponse(res) {
+  let payload = await res.json().catch(async () => {
+    const t = await res.text();
+    try {
+      return JSON.parse(t);
+    } catch {
+      return { error: "invalid json", raw: t };
+    }
+  });
+
+  // { body: "json-string" } 형태면 내부 파싱
+  if (payload && typeof payload.body === "string") {
+    try {
+      payload = JSON.parse(payload.body);
+    } catch {
+      // 그대로 둠
+    }
+  }
+  return payload;
+}
+
+/* ------------------- 렌더러 ------------------- */
+function renderPie(macroRatio) {
+  const wrap = document.getElementById("pie");
+  clearNode(wrap);
+
+  const carb = clamp01(macroRatio.carb ?? macroRatio.carbohydrate ?? 0);
+  const protein = clamp01(macroRatio.protein ?? 0);
+  const fat = clamp01(macroRatio.fat ?? 0);
+
+  const total = carb + protein + fat || 1; // 0분모 방지
   const parts = [
-    { label: "탄수화물", val: carb, color: getCSS("--c-carb") },
-    { label: "단백질", val: protein, color: getCSS("--c-prot") },
-    { label: "지방", val: fat, color: getCSS("--c-fat") },
+    { key: "탄수화물", value: carb / total, color: getCSS("--carb") },
+    { key: "단백질", value: protein / total, color: getCSS("--prot") },
+    { key: "지방", value: fat / total, color: getCSS("--fat") },
   ];
 
-  svg.innerHTML = "";
-  const cx = 100, cy = 100, r = 90;
-  let angle = -90;
+  // SVG 파이
+  const size = 260;
+  const r = size / 2 - 6;
+  const cx = size / 2;
+  const cy = size / 2;
 
-  svg.appendChild(el("circle", { cx, cy, r, fill: getCSS("--panel") }));
+  const svg = el("svg", { width: size, height: size, viewBox: `0 0 ${size} ${size}` });
 
+  let start = -90; // 12시 방향
   parts.forEach((p) => {
-    const ratio = p.val / total;
-    if (ratio === 0) return;
+    const sweep = p.value * 360;
+    const end = start + sweep;
 
-    const sweep = ratio * 360;
-    const start = polar(cx, cy, r, angle);
-    const end = polar(cx, cy, r, angle + sweep);
+    const s = polar(cx, cy, r, start);
+    const e = polar(cx, cy, r, end);
     const largeArc = sweep > 180 ? 1 : 0;
 
-    const pathData = `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y} Z`;
-    svg.appendChild(el("path", { d: pathData, fill: p.color }));
+    const path = el("path", {
+      d: [
+        `M ${cx} ${cy}`,
+        `L ${s.x} ${s.y}`,
+        `A ${r} ${r} 0 ${largeArc} 1 ${e.x} ${e.y}`,
+        "Z",
+      ].join(" "),
+      fill: p.color,
+    });
+    svg.appendChild(path);
 
-    const midAngle = angle + sweep / 2;
-    const labelPos = polar(cx, cy, r * 0.6, midAngle);
-    const pct = Math.round(ratio * 100);
+    start = end;
+  });
 
-    if (pct >= 5) {
-      const text = el("text", {
-        x: labelPos.x, y: labelPos.y,
-        "text-anchor": "middle", "dominant-baseline": "central",
-        fill: "#ffffffcc", "font-size": "14", "font-weight": "700",
-      });
-      text.textContent = `${pct}%`;
-      svg.appendChild(text);
-    }
-    angle += sweep;
+  wrap.appendChild(svg);
+
+  // 범례
+  const legend = document.getElementById("legend");
+  clearNode(legend);
+  parts.forEach((p) => {
+    const li = document.createElement("li");
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    dot.style.background = p.color;
+    const label = document.createElement("span");
+    label.textContent = `${p.key} ${(p.value * 100).toFixed(0)}%`;
+    li.appendChild(dot);
+    li.appendChild(label);
+    legend.appendChild(li);
   });
 }
 
-/* ------------------- 세부 충족도 렌더 ------------------- */
-const MICRO_LABELS = {
-  sodium: "나트륨", potassium: "칼륨", calcium: "칼슘",
-  fiber: "식이섬유", phosphorus: "인", vit_b12: "B12",
-  added_sugar: "첨가당", sat_fat: "포화지방", trans_fat: "트랜스",
-  vit_d: "비타민D", iron: "철", folate: "엽산",
-};
+function renderMicro(microList) {
+  const grid = document.getElementById("microGrid");
+  clearNode(grid);
 
-function renderMicroGridFromLambda(micro = {}) {
-  const wrap = document.getElementById("microGrid");
-  if (!wrap) return;
-  wrap.innerHTML = "";
-
-  const entries = Object.entries(micro);
-  if (entries.length === 0) {
-    wrap.innerHTML = `<li style="grid-column: 1 / -1; text-align: center;"><div class="micro-label">세부 영양 데이터가 없습니다.</div></li>`;
+  const list = Array.isArray(microList) ? microList : [];
+  if (!list.length) {
+    const p = document.createElement("p");
+    p.className = "rec-text";
+    p.textContent = "부영양소 데이터가 없습니다.";
+    grid.appendChild(p);
     return;
   }
 
-  entries.forEach(([key, lv]) => {
-    const label = MICRO_LABELS[key] || key;
-    const cls = lv === "상" ? "state-high" : lv === "중" ? "state-mid" : "state-low";
-    const li = document.createElement("li");
-    li.className = "micro-item";
-    li.innerHTML = `<div class="state-dot ${cls}" title="${label}: ${lv}">${lv}</div><div class="micro-label">${label}</div>`;
-    wrap.appendChild(li);
+  list.forEach((m) => {
+    const item = document.createElement("div");
+    item.className = "micro-item";
+
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = m.name ?? "-";
+
+    const status = document.createElement("div");
+    status.className = "status";
+    const level = m.level ?? levelFromRatio(m.ratio);
+    status.textContent = `충족도: ${level}`;
+
+    const bar = document.createElement("div");
+    bar.className = "progress";
+    const fill = document.createElement("span");
+    const ratio = clamp01(Number(m.ratio ?? 0));
+    fill.style.width = `${(ratio * 100).toFixed(0)}%`;
+    bar.appendChild(fill);
+
+    item.appendChild(name);
+    item.appendChild(status);
+    item.appendChild(bar);
+    grid.appendChild(item);
   });
 }
 
-/* ------------------- 서버 호출 ------------------- */
-async function getOrCreateReport() {
-  const userId = localStorage.getItem("vegan_user_id") || "demo";
-  const d = new Date();
-  const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  let raw = await callGetReport(userId, dateStr);
-  if (!raw || !raw.summaryLine) {
-    raw = await callPostReport(userId, dateStr);
-  }
-  return raw;
-}
-
-async function callGetReport(userId, dateStr) {
-  const url = `${API_BASE}/getDailyReportLambda?date=${encodeURIComponent(dateStr)}`;
-  const res = await fetch(url, { headers: { "Content-Type": "application/json", "x-user-id": userId }, method: "GET", mode: "cors" });
-  let data = await res.json().catch(() => null);
-  if (!data) return null;
-  if (typeof data.body === "string") { try { data = JSON.parse(data.body); } catch {} }
-  return data && Object.keys(data).length ? data : null;
-}
-
-async function callPostReport(userId, dateStr) {
-  const url = `${API_BASE}/getDailyReportLambda`;
-  const res = await fetch(url, { headers: { "Content-Type": "application/json", "x-user-id": userId }, method: "POST", mode: "cors", body: JSON.stringify({ date: dateStr }) });
-  let data = await res.json().catch(() => null);
-  if (!data) return null;
-  if (typeof data.body === "string") { try { data = JSON.parse(data.body); } catch {} }
-  return data;
-}
-
 /* ------------------- 유틸 ------------------- */
-function el(tag, attrs) { const n = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; }
-function polar(cx, cy, r, deg) { const rad = (deg * Math.PI) / 180; return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) }; }
-function getCSS(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
-function toComma(n) { return (Number(n) || 0).toLocaleString("ko-KR"); }
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function el(tag, attrs) {
+  const n = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  if (attrs) for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+function polar(cx, cy, r, deg) {
+  const rad = (deg * Math.PI) / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+function getCSS(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+function toComma(n) {
+  return (Number(n) || 0).toLocaleString("ko-KR");
+}
+function clamp01(x) {
+  x = Number(x) || 0;
+  if (x < 0) return 0;
+  if (x > 1) return 1;
+  return x;
+}
+function levelFromRatio(r) {
+  const v = clamp01(Number(r || 0));
+  if (v >= 0.8) return "상";
+  if (v >= 0.5) return "중";
+  return "하";
+}
+function setText(id, txt) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = String(txt ?? "");
+}
+function clearNode(node) {
+  if (!node) return;
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
+function todayStr() {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+function getDateFromURL() {
+  try {
+    const u = new URL(location.href);
+    return u.searchParams.get("date");
+  } catch {
+    return null;
+  }
+}
+function debounce(fn, ms) {
+  let t;
+  return (...a) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...a), ms);
+  };
+}
+
+/* 확대 방지 (모바일 제스처) */
 function preventZoom() {
-  window.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
-  let last = 0; document.addEventListener("touchend", (e) => { const now = Date.now(); if (now - last <= 350) e.preventDefault(); last = now; }, { passive: false });
-  window.addEventListener("wheel", (e) => { if (e.ctrlKey || e.metaKey) e.preventDefault(); }, { passive: false });
+  window.addEventListener(
+    "gesturestart",
+    (e) => e.preventDefault(),
+    { passive: false }
+  );
+  let last = 0;
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      const now = Date.now();
+      if (now - last <= 350) e.preventDefault();
+      last = now;
+    },
+    { passive: false }
+  );
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (e.ctrlKey || e.metaKey) e.preventDefault();
+    },
+    { passive: false }
+  );
 }
