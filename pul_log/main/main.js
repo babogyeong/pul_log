@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", async () => { /* 'async' 추가 */
   /* ===== 설정 (ADDED) ===== */
   // 백엔드 Lambda와 연결된 API Gateway 엔드포인트 URL로 변경하세요.
-  const CHAT_API_URL = "https://your-api-gateway-id.execute-api.region.amazonaws.com/prod/manageChatHistory";
+  const CHAT_API_URL = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
   const USER_ID = "abcd123456-789"; // 다른 파일과 동일한 사용자 ID
 
   /* ===== 엘리먼트 ===== */

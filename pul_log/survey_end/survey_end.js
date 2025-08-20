@@ -37,6 +37,7 @@ async function loadAndRenderName() {
       mode: 'cors',
       headers: {
         "Accept": "application/json",
+        // (추가) 사용자 ID를 헤더에 담아 전송
         "x-user-id": USER_ID
       }
     });

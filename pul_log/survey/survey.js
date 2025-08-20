@@ -1,6 +1,6 @@
 /* ===== 설정 ===== */
 const NEXT_URL = "survey_end.html"; // 완료 후 이동할 페이지
-const API_ENDPOINT = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/manageProfile"; // 서버 없으면 로컬스토리지 백업
+const API_ENDPOINT = "https://d3p96xzg4kgeam.cloudfront.net/manageProfile"; // 서버 없으면 로컬스토리지 백업
 const USER_ID = "abcd123456-789"; // report.js와 동일한 고정 사용자 ID
 
 
@@ -119,7 +119,8 @@ async function onSubmit() {
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "x-user-id": USER_ID // Lambda가 인식할 수 있도록 헤더에 사용자 ID 추가
+        // (추가) 사용자 ID를 헤더에 담아 전송
+        "x-user-id": USER_ID
       },
       body: JSON.stringify(data),
     });
