@@ -1,5 +1,5 @@
 /* ===== 설정 ===== */
-const NEXT_URL = "intro.html"; // 온보딩 후 이동할 페이지 (필요 시 변경)
+const NEXT_URL = "intro/intro.html"; // 온보딩 후 이동할 페이지 (필요 시 변경)
 const HOLD_MS = getComputedStyle(document.documentElement)
   .getPropertyValue("--hold")
   .trim();
