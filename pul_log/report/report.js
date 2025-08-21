@@ -142,7 +142,7 @@ async function callPostReport(userId, dateStr) {
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("backBtn")?.addEventListener("click", () => {
     if (history.length > 1) history.back();
-    else location.href = "main.html";
+    else location.href = "../main/main.html";
   });
 
   console.info("report.js v=2025-08-20-PIE (/reports routes, SVG pie)");
