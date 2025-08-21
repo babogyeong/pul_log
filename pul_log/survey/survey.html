@@ -160,84 +160,73 @@
             </div>
 
             <div class="group">
-              <h2 class="q">알러지가 있나요?</h2>
-              <div class="chips" role="group" aria-label="알러지">
-                <button class="chip" data-name="allergies" data-value="egg">
-                  알류
-                </button>
-                <button class="chip" data-name="allergies" data-value="milk">
-                  우유
-                </button>
-                <button
-                  class="chip"
-                  data-name="allergies"
-                  data-value="buckwheat"
-                >
-                  메밀
-                </button>
-                <button class="chip" data-name="allergies" data-value="wheat">
-                  밀
-                </button>
-                <button class="chip" data-name="allergies" data-value="pine">
-                  잣
-                </button>
-                <button class="chip" data-name="allergies" data-value="walnut">
-                  호두
-                </button>
-                <button class="chip" data-name="allergies" data-value="crab">
-                  게
-                </button>
-                <button class="chip" data-name="allergies" data-value="shrimp">
-                  새우
-                </button>
-                <button class="chip" data-name="allergies" data-value="squid">
-                  오징어
-                </button>
-                <button
-                  class="chip"
-                  data-name="allergies"
-                  data-value="mackerel"
-                >
-                  고등어
-                </button>
-                <button
-                  class="chip"
-                  data-name="allergies"
-                  data-value="shellfish"
-                >
-                  조개류
-                </button>
-                <button class="chip" data-name="allergies" data-value="peach">
-                  복숭아
-                </button>
-                <button class="chip" data-name="allergies" data-value="tomato">
-                  토마토
-                </button>
-                <button class="chip" data-name="allergies" data-value="chicken">
-                  닭고기
-                </button>
-                <button class="chip" data-name="allergies" data-value="pork">
-                  돼지고기
-                </button>
-                <button class="chip" data-name="allergies" data-value="beef">
-                  소고기
-                </button>
-                <button class="chip" data-name="allergies" data-value="sulfite">
-                  아황산류
-                </button>
-                <button
-                  class="chip"
-                  data-name="allergies"
-                  data-value="none"
-                  data-none
-                >
-                  해당없음
-                </button>
-              </div>
-              <p class="note">
-                이외의 알러지는 현재 도움을 드리기에 한계가 있어요
-              </p>
-            </div>
+  <h2 class="q">알러지가 있나요?</h2>
+
+  <!-- 곡물류 -->
+  <div class="accordion">
+    <button class="accordion-header">곡물류</button>
+    <div class="accordion-panel">
+      <div class="chips" role="group" aria-label="알러지-곡물류">
+        <button class="chip" data-name="allergies" data-value="buckwheat">메밀</button>
+        <button class="chip" data-name="allergies" data-value="wheat">밀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 견과류 -->
+  <div class="accordion">
+    <button class="accordion-header">견과류</button>
+    <div class="accordion-panel">
+      <div class="chips" role="group" aria-label="알러지-견과류">
+        <button class="chip" data-name="allergies" data-value="pine">잣</button>
+        <button class="chip" data-name="allergies" data-value="walnut">호두</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 해산물류 -->
+  <div class="accordion">
+    <button class="accordion-header">해산물류</button>
+    <div class="accordion-panel">
+      <div class="chips" role="group" aria-label="알러지-해산물류">
+        <button class="chip" data-name="allergies" data-value="crab">게</button>
+        <button class="chip" data-name="allergies" data-value="shrimp">새우</button>
+        <button class="chip" data-name="allergies" data-value="squid">오징어</button>
+        <button class="chip" data-name="allergies" data-value="mackerel">고등어</button>
+        <button class="chip" data-name="allergies" data-value="shellfish">조개류</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 육류 -->
+  <div class="accordion">
+    <button class="accordion-header">육류</button>
+    <div class="accordion-panel">
+      <div class="chips" role="group" aria-label="알러지-육류">
+        <button class="chip" data-name="allergies" data-value="chicken">닭고기</button>
+        <button class="chip" data-name="allergies" data-value="pork">돼지고기</button>
+        <button class="chip" data-name="allergies" data-value="beef">소고기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 기타 -->
+  <div class="accordion">
+    <button class="accordion-header">기타</button>
+    <div class="accordion-panel">
+      <div class="chips" role="group" aria-label="알러지-기타">
+        <button class="chip" data-name="allergies" data-value="egg">알류</button>
+        <button class="chip" data-name="allergies" data-value="milk">우유</button>
+        <button class="chip" data-name="allergies" data-value="peach">복숭아</button>
+        <button class="chip" data-name="allergies" data-value="tomato">토마토</button>
+        <button class="chip" data-name="allergies" data-value="sulfite">아황산류</button>
+        <button class="chip" data-name="allergies" data-value="none" data-none>해당없음</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">이외의 알러지는 현재 도움을 드리기에 한계가 있어요</p>
+</div>
           </div>
         </article>
 
