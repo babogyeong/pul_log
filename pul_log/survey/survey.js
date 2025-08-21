@@ -3,7 +3,6 @@ const NEXT_URL = "survey_end.html"; // 완료 후 이동할 페이지
 const API_ENDPOINT = "https://d3p96xzg4kgeam.cloudfront.net/manageProfile"; // 서버 없으면 로컬스토리지 백업
 const USER_ID = "abcd123456-789"; // report.js와 동일한 고정 사용자 ID
 
-
 /* ===== 엘리먼트 ===== */
 const track = document.getElementById("track");
 const dots = Array.from(document.querySelectorAll(".pager .dot"));
@@ -118,9 +117,9 @@ async function onSubmit() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
         // (추가) 사용자 ID를 헤더에 담아 전송
-        "x-user-id": USER_ID
+        "x-user-id": USER_ID,
       },
       body: JSON.stringify(data),
     });
@@ -130,18 +129,21 @@ async function onSubmit() {
       window.location.assign(NEXT_URL);
     } else {
       // 서버에서 4xx, 5xx 에러를 반환한 경우
-      const errorData = await res.json().catch(() => ({ message: "알 수 없는 오류" }));
+      const errorData = await res
+        .json()
+        .catch(() => ({ message: "알 수 없는 오류" }));
       throw new Error(errorData.message || "서버에서 오류가 발생했습니다.");
     }
   } catch (error) {
     // 네트워크 오류 또는 위에서 발생시킨 에러 처리
-    alert(`전송에 실패했어요. 네트워크 상태를 확인해주세요.\n(${error.message})`);
+    alert(
+      `전송에 실패했어요. 네트워크 상태를 확인해주세요.\n(${error.message})`
+    );
     // 로딩 상태 해제
     submitBtn.disabled = false;
     submitBtn.textContent = "완료";
   }
 }
-
 
 /* ===== 데이터 수집 & 검증 ===== */
 function collectData() {
@@ -204,21 +206,37 @@ function preventZoom() {
 /* ===== 알러지 아코디언 ===== */
 document.addEventListener("DOMContentLoaded", () => {
   const accordions = document.querySelectorAll(".accordion");
-  accordions.forEach(acc => {
+
+  accordions.forEach((acc) => {
     const header = acc.querySelector(".accordion-header");
     const panel = acc.querySelector(".accordion-panel");
 
     header.addEventListener("click", () => {
       const isOpen = header.classList.contains("active");
+
       if (isOpen) {
+        // 닫기: 현재 높이에서 0으로
+        panel.style.maxHeight = panel.scrollHeight + "px"; // 현재 높이 고정
+        requestAnimationFrame(() => {
+          panel.style.maxHeight = "0";
+        });
         header.classList.remove("active");
-        panel.style.maxHeight = null;
         panel.classList.remove("open");
       } else {
+        // 열기: scrollHeight까지 부드럽게
         header.classList.add("active");
-        panel.style.maxHeight = panel.scrollHeight + "px";
         panel.classList.add("open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
       }
     });
+
+    // 패널 안의 내용이 변해도 자연스럽게 높이 갱신
+    const resizeObserver = new ResizeObserver(() => {
+      if (panel.classList.contains("open")) {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+    resizeObserver.observe(panel);
   });
 });
+
