@@ -200,3 +200,25 @@ function preventZoom() {
     { passive: false }
   );
 }
+
+/* ===== 알러지 아코디언 ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  const accordions = document.querySelectorAll(".accordion");
+  accordions.forEach(acc => {
+    const header = acc.querySelector(".accordion-header");
+    const panel = acc.querySelector(".accordion-panel");
+
+    header.addEventListener("click", () => {
+      const isOpen = header.classList.contains("active");
+      if (isOpen) {
+        header.classList.remove("active");
+        panel.style.maxHeight = null;
+        panel.classList.remove("open");
+      } else {
+        header.classList.add("active");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.classList.add("open");
+      }
+    });
+  });
+});
