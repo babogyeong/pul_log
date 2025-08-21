@@ -42,14 +42,14 @@ async function loadAndRenderName() {
       }
     });
 
-    if (!res.ok) {
-      // 사용자를 찾지 못했거나 서버 오류가 발생한 경우
-      nameSpan.textContent = "방문자"; // 기본값
-      return;
-    }
+    // if (!res.ok) {
+    //   // 사용자를 찾지 못했거나 서버 오류가 발생한 경우
+    //   nameSpan.textContent = "방문자"; // 기본값
+    //   return;
+    // }
 
     const data = await res.json();
-    const name = String(data?.name || "").trim();
+    const name = String(data?.nickname || "").trim();
     nameSpan.textContent = name || "방문자";
 
   } catch (error) {
