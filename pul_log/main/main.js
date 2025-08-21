@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", async () => { /* 'async' 추가 */
     renderHistory(history);
   } catch (error) {
     console.error("Failed to load chat history:", error);
-    addMessage({ role: "assistant", text: "이전 대화 기록을 불러오는 데 실패했습니다." });
   }
 
   // 히스토리 없을 때만 안내 버블 등장
