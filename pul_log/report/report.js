@@ -73,7 +73,7 @@ function polar(cx, cy, r, deg) {
 }
 
 /* ---------- API ---------- */
-/* API Gateway Invoke URL (Stage까지) — 끝 슬래시 없음 */
+/* API Gateway Invoke URL (Stage까지) — 끝  슬래시 없음 */
 const API_BASE = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod";
 /* 고정 사용자 */
 const USER_ID = "abcd123456-789";
