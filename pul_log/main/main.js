@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => { /* 'async' 추가 */
   // 히스토리 없을 때만 안내 버블 등장
   if (history.length === 0) showTip();
 
-  // 기존 이벤트 리스너들 (변경 없음)
+  // 기존 이벤트 리스너들  (변경 없음)
   autoResizeTextarea(input);
   form.addEventListener("submit", (e) => e.preventDefault());
   let composing = false;
