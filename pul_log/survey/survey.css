@@ -200,3 +200,40 @@ body {
 .hidden {
   display: none;
 }
+
+.accordion {
+  border: 2px solid var(--green-600);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: #fff2;
+}
+
+.accordion-header {
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.3s var(--ease);
+}
+.accordion-header.active {
+  background: var(--green-700);
+}
+
+.accordion-panel {
+  max-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding: 0 14px;
+}
+
+.accordion-panel.open {
+  padding: 14px;
+}
