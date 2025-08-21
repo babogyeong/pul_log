@@ -171,10 +171,50 @@ document.addEventListener("DOMContentLoaded", async () => { /* 'async' 추가 */
 });
 
 /* ============== 공용 유틸 (기존과 동일) ============== */
-function autoResizeTextarea(el) { /* ... */ }
-function clearInputHard(el) { /* ... */ }
-function scrollToBottom(container) { /* ... */ }
-function setupViewportInsets() { /* ... */ }
-function preventZoom() { /* ... */ }
+function autoResizeTextarea(el) {const resize = () => {
+    el.style.height = "auto";
+    el.style.height =
+      Math.min(el.scrollHeight, window.innerHeight * 0.28) + "px";
+  };
+  el.addEventListener("input", resize);
+  resize();}
+function clearInputHard(el) {// 1) 값 제거
+  el.value = "";
+  // 2) 높이 재계산
+  autoResizeTextarea(el);
+  // 3) iOS 예측 글자 커밋 잔상을 미세 지연으로 한 번 더 제거
+  queueMicrotask(() => {
+    el.value = "";
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  });}
+function scrollToBottom(container) {container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });}
+function setupViewportInsets() {if (!window.visualViewport) return;
+  const root = document.documentElement;
+  const onResize = () => {
+    const vv = window.visualViewport;
+    root.style.setProperty("--vvh", vv.height + "px");
+  };
+  window.visualViewport.addEventListener("resize", onResize);
+  onResize();}
+function preventZoom() {window.addEventListener("gesturestart", (e) => e.preventDefault(), {
+    passive: false,
+  });
+  let lastTouchEnd = 0;
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 350) e.preventDefault();
+      lastTouchEnd = now;
+    },
+    { passive: false }
+  );
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (e.ctrlKey || e.metaKey) e.preventDefault();
+    },
+    { passive: false }
+  );}
 
 // 공용 유틸 함수들의 내용은 기존 파일에서 복사하여 붙여넣으세요.
