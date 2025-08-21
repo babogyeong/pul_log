@@ -3,7 +3,7 @@
  * =========================== */
 
 /* ===== 설정 ===== */
-const NEXT_URL = "main.html"; // 다음 페이지
+const NEXT_URL = "../main/main.html"; // 다음 페이지
 const API_ENDPOINT = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/manageProfile"; // survey.js와 동일
 const USER_ID = "abcd123456-789"; // survey.js와 동일
 
