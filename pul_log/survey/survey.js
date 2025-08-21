@@ -1,5 +1,5 @@
 /* ===== 설정 ===== */
-const NEXT_URL = "survey_end.html"; // 완료 후 이동할 페이지
+const NEXT_URL = "../survey_end/survey_end.html"; // 완료 후 이동할 페이지
 const API_ENDPOINT = "https://fh5zli5lvi.execute-api.us-east-1.amazonaws.com/prod/manageProfile"; // 서버 없으면 로컬스토리지 백업
 const USER_ID = "abcd123456-789"; // report.js와 동일한 고정 사용자 ID
 
